@@ -58,15 +58,27 @@ export const authOptions: NextAuthOptions = {
         GithubProvider({
             clientId: process.env.GITHUB_CLIENT_ID as string,
             clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
+            profile(profile, tokens) {
+                const { id, name, email, picture } = profile
+                console.log(
+                    "#######------------REPORT OF PROFILE---------------##########"
+                )
+                console.log(JSON.stringify(profile))
+
+                return {
+                    id,
+                    name,
+                    email,
+                    picture,
+                }
+            },
         }),
-    ],  
-    session: {
-        strategy: "jwt"
-    },
-    secret: process.env.SECRET,
+    ],
+
+    secret: process.env.NEXTAUTH_SECRET,
     debug: process.env.NODE_ENV === "development",
     callbacks: {
-        async signIn({ user, account, profile, email, credentials }){
+        async signIn({ user, account, profile, email, credentials }) {
             return true
         },
 
@@ -74,7 +86,7 @@ export const authOptions: NextAuthOptions = {
             return baseUrl
         },
 
-        async session({ session, user, token }){
+        async session({ session, user, token }) {
             console.log("Estou na sessão")
             return session
         },
@@ -82,7 +94,7 @@ export const authOptions: NextAuthOptions = {
         async jwt({ token, user, account, profile, isNewUser }) {
             return token
         },
-    }
+    },
     // pages: {
     //     signIn: "/login"
     // }
