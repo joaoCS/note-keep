@@ -55,10 +55,34 @@ export const authOptions: NextAuthOptions = {
                 return user
             },
         }),
-    ],
-
+        GithubProvider({
+            clientId: process.env.GITHUB_CLIENT_ID as string,
+            clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
+        }),
+    ],  
+    session: {
+        strategy: "jwt"
+    },
     secret: process.env.SECRET,
     debug: process.env.NODE_ENV === "development",
+    callbacks: {
+        async signIn({ user, account, profile, email, credentials }){
+            return true
+        },
+
+        async redirect({ url, baseUrl }) {
+            return baseUrl
+        },
+
+        async session({ session, user, token }){
+            console.log("Estou na sessão")
+            return session
+        },
+
+        async jwt({ token, user, account, profile, isNewUser }) {
+            return token
+        },
+    }
     // pages: {
     //     signIn: "/login"
     // }
