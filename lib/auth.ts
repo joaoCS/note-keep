@@ -39,19 +39,20 @@ export const authOptions: NextAuthOptions = {
                         email: credentials.email,
                     },
                 })
-
+                
                 if (!user || !user.hashedPassword)
-                    throw new Error(
-                        "Usuário não cadastrado através de credenciais!"
+                throw new Error(
+            "Usuário não cadastrado através de credenciais!"
                     )
-
-                const matchPassword = await bcrypt.compare(
-                    credentials.password,
+                    
+                    const matchPassword = await bcrypt.compare(
+                        credentials.password,
                     user.hashedPassword
                 )
 
-                if (!matchPassword) throw new Error("Senha incorreta!")
-
+                if (!matchPassword) 
+                    throw new Error("Senha incorreta!")
+                
                 return user
             },
         }),
@@ -87,7 +88,6 @@ export const authOptions: NextAuthOptions = {
         },
 
         async session({ session, user, token }) {
-            console.log("Estou na sessão")
             return session
         },
 
@@ -95,6 +95,10 @@ export const authOptions: NextAuthOptions = {
             return token
         },
     },
+
+    session: {
+        strategy: "jwt"
+    }
     // pages: {
     //     signIn: "/login"
     // }
